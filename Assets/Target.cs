@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
+    /********
+    memo : 
+    Target.SetActive(false);
+    のときは、時間の減少が有効にならない。
+    trueに変更されたタイミングで時間の減少が始まる。
+    *********/
     public int destroyScore = 10000;
-    [SerializeField]
+    public float generateTime = 10000;
     public float maxSec = 5.0f, maxHealth = 100.0f;
-    [SerializeField]
     public float remainSec, remainHealth;
+    public int targetType = 0;
+    public float moveDirection = 1.0f, moveSpeed = 1.0f;
+
+    // static Vector2 randomRange = new Vector2(UnityEngine.Random.Range(-7.0f, 7.0f), UnityEngine.Random.Range(-5.0f, 5.0f));
+
     public Player player;
 
     // Start is called before the first frame update
@@ -21,9 +31,30 @@ public class Target : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Vector2 targetPos = gameObject.transform.position;
         remainSec -= Time.deltaTime;
-        if (remainSec <= 0.0f) remainSec = maxSec;
+        if (remainSec <= 0.0f)
+        {
+            Destroy(gameObject);
+        }
+        switch (targetType)
+        {
+            case 0:
+            // don't move
 
+                break;
+            case 1:
+            // Repetition move
+                gameObject.transform.position = new Vector2(targetPos.x + moveSpeed, targetPos.y);
+                break;
+            case 2:
+            // Refrection move
+
+                break;
+            case 3:
+            // circurate move 
+                break;
+        }
     }
     public void Damage(float damage)
     {
@@ -34,6 +65,9 @@ public class Target : MonoBehaviour
             player.AddScore(destroyScore);
             player.AddPoint(destroyScore);
         }
+    }
+    public void Activation(bool flag) {
+        gameObject.SetActive(flag);
     }
     /*memo: 2020 08 12 Collisionで制御しようとした*/
     // void OnTriggerEnter2D(Collider2D c)

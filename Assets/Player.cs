@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public GameObject bullet;
     public int[] maxAmmoLevelList = new int[6] { 20, 25, 30, 35, 40, 100 };
     private int[] penetrateLevelList = new int[6] { 1, 2, 3, 4, 5, 10 };
-    private float[] reloadSpeedLevelList = new float[6] { 1.5f, 1.2f, 1.0f, 0.7f, 0.5f, 0.2f };
+    private float[] reloadSpeedLevelList = new float[6] { 1.5f, 1.2f, 1.0f, 0.8f, 0.7f, 0.5f };
     private float[] damageLevelList = new float[6] { 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 5.0f };
     private float[] fireRateLevelList = new float[6] { 0.2f, 0.175f, 0.15f, 0.125f, 0.1f, 0.05f };
     private float[] recoilSuppressionLevelList = new float[6] { 0.01f, 0.1f, 0.2f, 0.35f, 0.6f, 0.9f };
@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
     private bool fireFlag;
     public int score, point;
 
+    public AudioSource SoundFire;
+    public AudioSource SoundReload;
 
     private string[] gameStatusList = new string[] { "in_game", "reinforcing" };
     private int targetLayerMask = 0;
@@ -100,6 +102,7 @@ public class Player : MonoBehaviour
                         }
                     }
                     Instantiate(bullet, hitpos, transform.rotation);
+                    SoundFire.PlayOneShot(SoundFire.clip);
 
                     bulletCount++;
                 }
@@ -110,7 +113,7 @@ public class Player : MonoBehaviour
             fireRemainTime -= Time.deltaTime;
         }
 
-        // reload UI controll
+        // reload UI control
         if (currentReloadTime > 0)
         {
             currentReloadTime -= Time.deltaTime;
@@ -142,6 +145,7 @@ public class Player : MonoBehaviour
             currentReloadTime = reloadSpeedLevelList[reloadSpeedLevel];
             realoadUI.SetActive(true);
             emptyAmmoUI.SetActive(false);
+            SoundReload.PlayOneShot(SoundReload.clip);
         }
     }
     void ContinueInit()
