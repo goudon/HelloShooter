@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 public class Player : MonoBehaviour
 {
+    public GlobalControl globalControl;
     public GameObject bullet;
     public int[] maxAmmoLevelList = new int[6] { 20, 25, 30, 35, 40, 100 };
     private int[] penetrateLevelList = new int[6] { 1, 2, 3, 4, 5, 10 };
@@ -14,12 +15,12 @@ public class Player : MonoBehaviour
     private float[] fireRateLevelList = new float[6] { 0.2f, 0.175f, 0.15f, 0.125f, 0.1f, 0.05f };
     private float[] recoilSuppressionLevelList = new float[6] { 0.01f, 0.1f, 0.2f, 0.35f, 0.6f, 0.9f };
 
-    public int maxAmmoLevel = 0;
-    public int penetrateLevel = 0;
-    public int reloadSpeedLevel = 0;
-    public int damageLevel = 0;
-    public int fireRateLevel = 0;
-    public int recoilSuppressionLevel = 5;
+    public int maxAmmoLevel { set; get; } = 0;
+    public int penetrateLevel { set; get; } = 0;
+    public int reloadSpeedLevel { set; get; } = 0;
+    public int damageLevel { set; get; } = 0;
+    public int fireRateLevel { set; get; } = 0;
+    public int recoilSuppressionLevel { set; get; } = 0;
     private int maxAmmo, penetrate;
     private float reloadSpeed, damage, rappidRate, recoilSuppression;
     private bool isReload;
@@ -32,25 +33,29 @@ public class Player : MonoBehaviour
     private bool fireFlag;
     public int score, point;
 
-    public AudioSource SoundFire;
-    public AudioSource SoundReload;
+    public AudioSource soundFire;
+    public AudioSource soundReload;
+    public AudioSource soundHit;
 
     private string[] gameStatusList = new string[] { "in_game", "reinforcing" };
     private int targetLayerMask = 0;
+
 
     void Start()
     {
         Cursor.visible = false;
         targetLayerMask = LayerMask.GetMask("Target");
+
         fireRemainTime = 0.0f;
         rappidRate = fireRateLevelList[fireRateLevel];
         recoilSuppression = recoilSuppressionLevelList[recoilSuppressionLevel];
         if (recoilSuppression < 0.0f) recoilSuppression = 0.001f;
         penetrate = penetrateLevelList[penetrateLevel];
         damage = damageLevelList[damageLevel];
+        remainAmmo = maxAmmoLevelList[maxAmmoLevel];
+
         score = 0;
         point = 0;
-        remainAmmo = maxAmmoLevelList[maxAmmoLevel];
     }
 
     void Update()
@@ -63,15 +68,16 @@ public class Player : MonoBehaviour
 
         // Debug.Log(Input.mousePosition);
         transform.position = (Vector2)ray.origin;
-        if (Input.GetMouseButton(1))
+        bool checkOptionOrEdit = (!globalControl.isOption && !globalControl.isEdit);
+        if (Input.GetMouseButton(1) && checkOptionOrEdit)
         {
             Reload();
         }
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && checkOptionOrEdit)
         {
             Vector2 hitpos = transform.position;
             int bulletCount = 0;
-            if (fireRemainTime < 0.0 && remainAmmo > 0 && !isReload)
+            if (fireRemainTime < 0 && remainAmmo > 0 && !isReload)
             {
                 // TODO : use shellBulletCount
                 while (bulletCount < 1)
@@ -89,6 +95,10 @@ public class Player : MonoBehaviour
                     {
                         var penetrateTargetCount = hitList.Length < penetrate ? hitList.Length : penetrate;
                         var sliceHitList = new ArraySegment<RaycastHit2D>(hitList, 0, penetrateTargetCount);
+                        if (sliceHitList.Count > 0)
+                        {
+                            soundHit.PlayOneShot(soundHit.clip);
+                        }
                         foreach (RaycastHit2D hit in sliceHitList)
                         {
                             // damage culc
@@ -97,12 +107,12 @@ public class Player : MonoBehaviour
                             float rad = hitTarget.GetComponent<RectTransform>().localScale.x * hitTarget.GetComponent<CircleCollider2D>().radius;
                             float proc = (1 - dist / rad);
                             float damagePoint = damage * proc;
-                            AddScore((int)(1 + (damagePoint * damagePoint)*10));
+                            AddScore((int)(1 + (damagePoint * damagePoint) * 10));
                             hitTarget.GetComponent<Target>().Damage(damagePoint);
                         }
                     }
                     Instantiate(bullet, hitpos, transform.rotation);
-                    SoundFire.PlayOneShot(SoundFire.clip);
+                    soundFire.PlayOneShot(soundFire.clip);
 
                     bulletCount++;
                 }
@@ -133,10 +143,6 @@ public class Player : MonoBehaviour
         currentRandRange -= Input.GetMouseButton(0) ? (Time.deltaTime / adjustDeltaTime) : Time.deltaTime * adjustDeltaTime;
         currentRandRange = currentRandRange < 0 ? 0 : currentRandRange;
     }
-    void GunRebuildOnEdit()
-    {
-
-    }
     void Reload()
     {
         if (!isReload && remainAmmo != maxAmmoLevelList[maxAmmoLevel])
@@ -145,17 +151,33 @@ public class Player : MonoBehaviour
             currentReloadTime = reloadSpeedLevelList[reloadSpeedLevel];
             realoadUI.SetActive(true);
             emptyAmmoUI.SetActive(false);
-            SoundReload.PlayOneShot(SoundReload.clip);
+            soundReload.PlayOneShot(soundReload.clip);
         }
     }
-    void ContinueInit()
+    public void GunRebuildOnEdit()
+    {
+        fireRemainTime = 0.0f;
+        rappidRate = fireRateLevelList[fireRateLevel];
+        recoilSuppression = recoilSuppressionLevelList[recoilSuppressionLevel];
+        if (recoilSuppression < 0.0f) recoilSuppression = 0.001f;
+        penetrate = penetrateLevelList[penetrateLevel];
+        damage = damageLevelList[damageLevel];
+        remainAmmo = maxAmmoLevelList[maxAmmoLevel];
+    }
+    public void ContinueInit()
     {
 
     }
-    public void AddPoint(int inPoint) {
+    public void AddPoint(int inPoint)
+    {
         point += inPoint;
-     }
-    public void AddScore(int inScore){
+    }
+    public void UsePoint(int outPoint)
+    {
+        point -= outPoint;
+    }
+    public void AddScore(int inScore)
+    {
         score += inScore;
     }
 }

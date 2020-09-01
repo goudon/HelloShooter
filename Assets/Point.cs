@@ -14,6 +14,6 @@ public class Point : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.GetComponent<Text>().text = "edit point :\n" + player.point.ToString();
+        gameObject.GetComponent<Text>().text = "edit point : " + player.point.ToString()+" pt";
     }
 }

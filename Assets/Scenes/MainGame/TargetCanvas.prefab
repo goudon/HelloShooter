@@ -135,6 +135,7 @@ MonoBehaviour:
   targetType: 0
   moveDirection: 1
   moveSpeed: 1
+  soundCrush: {fileID: 0}
   player: {fileID: 0}
 --- !u!58 &2848180063856960669
 CircleCollider2D:

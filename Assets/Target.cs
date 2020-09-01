@@ -20,6 +20,7 @@ public class Target : MonoBehaviour
     // static Vector2 randomRange = new Vector2(UnityEngine.Random.Range(-7.0f, 7.0f), UnityEngine.Random.Range(-5.0f, 5.0f));
 
     public Player player;
+    public AudioSource soundCrush;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +65,7 @@ public class Target : MonoBehaviour
             Destroy(gameObject);
             player.AddScore(destroyScore);
             player.AddPoint(destroyScore);
+            soundCrush.PlayOneShot(soundCrush.clip);
         }
     }
     public void Activation(bool flag) {
