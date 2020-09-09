@@ -68,7 +68,10 @@ public class Player : MonoBehaviour
 
         // Debug.Log(Input.mousePosition);
         transform.position = (Vector2)ray.origin;
-        bool checkOptionOrEdit = (!globalControl.isOption && !globalControl.isEdit);
+        bool checkOptionOrEdit = (!globalControl.isOption && !globalControl.isEdit && !globalControl.isExplanation);
+        if (globalControl.isEdit) {
+            currentRandRange = 0;
+        }
         if (Input.GetMouseButton(1) && checkOptionOrEdit)
         {
             Reload();
@@ -109,6 +112,7 @@ public class Player : MonoBehaviour
                             float damagePoint = damage * proc;
                             AddScore((int)(1 + (damagePoint * damagePoint) * 10));
                             hitTarget.GetComponent<Target>().Damage(damagePoint);
+                            globalControl.addFireHitCount();
                         }
                     }
                     Instantiate(bullet, hitpos, transform.rotation);
@@ -119,6 +123,7 @@ public class Player : MonoBehaviour
                 currentRandRange += randAccerate * recoilSuppressionNormal * adjustDeltaTime;
                 fireRemainTime = rappidRate;
                 remainAmmo--;
+                globalControl.addFireCount();
             }
             fireRemainTime -= Time.deltaTime;
         }
@@ -151,6 +156,7 @@ public class Player : MonoBehaviour
             currentReloadTime = reloadSpeedLevelList[reloadSpeedLevel];
             realoadUI.SetActive(true);
             emptyAmmoUI.SetActive(false);
+            globalControl.addReloadCount();
             soundReload.PlayOneShot(soundReload.clip);
         }
     }
@@ -163,10 +169,7 @@ public class Player : MonoBehaviour
         penetrate = penetrateLevelList[penetrateLevel];
         damage = damageLevelList[damageLevel];
         remainAmmo = maxAmmoLevelList[maxAmmoLevel];
-    }
-    public void ContinueInit()
-    {
-
+        realoadUI.SetActive(false);
     }
     public void AddPoint(int inPoint)
     {

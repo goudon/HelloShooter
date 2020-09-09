@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TargetGenerate : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -11,14 +12,17 @@ public class TargetGenerate : MonoBehaviour
     public float maxTime = 60;
     public float elapsedTime = 0;
     public GameObject timeBar;
+    private int totalTarget = 0;
 
     void Start()
     {
         elapsedTime = 0.0f;
+        totalTarget = 0;
         Target[] stageTargets = gameObject.GetComponentsInChildren<Target>(true);
         foreach (Target target in stageTargets)
         {
             target.Activation(false);
+            totalTarget++;
         }
         timeBar.GetComponent<RectTransform>().sizeDelta = new Vector2(0,3);
     }
@@ -42,7 +46,7 @@ public class TargetGenerate : MonoBehaviour
         }
         else {
             globalControl.stageEnd();
-        } 
+        }
 
         //     instantiateTarget.maxSec = 2.0f;
         //     instantiateTarget.maxHealth = 2.0f;
@@ -53,4 +57,5 @@ public class TargetGenerate : MonoBehaviour
         // 
         // 
     }
+
 }

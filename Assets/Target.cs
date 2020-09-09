@@ -25,6 +25,7 @@ public class Target : MonoBehaviour
     private float currentRot = 0;
     public Player player;
     public AudioSource soundCrush;
+    public GlobalControl globalControl;
 
     // Start is called before the first frame update
     void Start()
@@ -80,6 +81,7 @@ public class Target : MonoBehaviour
             Destroy(gameObject);
             player.AddScore(destroyScore);
             player.AddPoint(destroyScore);
+            globalControl.addBreakTargetCount();
             soundCrush.PlayOneShot(soundCrush.clip);
         }
     }
