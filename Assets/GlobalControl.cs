@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GlobalControl : MonoBehaviour
 {
     // Start is called before the first frame update
+    public Player player;
     public int currentStage = 0;
     public int playerStatus = 0;
     public bool isReady = false;
@@ -13,6 +14,7 @@ public class GlobalControl : MonoBehaviour
     public bool isEdit = false;
     public bool isExplanation = false;
     public bool isResult = false;
+    public bool isClearResult = false;
     public GameObject[] explanationUIs;
     private int explanationPage = 0;
     public GameObject editUI;
@@ -21,19 +23,18 @@ public class GlobalControl : MonoBehaviour
     public Text readyText;
     public GameObject resultUI;
     public Text resultText;
-    public GameObject endResultUI;
-    public Text endResultText;
-
+    public GameObject clearResultUI;
+    public Text clearResultText, clearScoreText;
     // mainMenu : 0 , stage : 1 , edit : 2
     public GameObject[] stages = new GameObject[5];
-
     // result status
-    private int oneStageTargetTotalCount = 0, oneStageTargetTotalBreakCount = 0, targetTotalCount = 0, targetBreakCount = 0;
-    private int oneStageFireCount = 0, oneStageFireHitCount = 0, fireCount = 0, fireHitCount = 0, reloadCount = 0;
+    private int oneStageTargetTotalCount = 0, oneStageTargetTotalBreakCount = 0;
+    private int allTargetTotalCount = 0, allTargetBreakCount = 0;
+    private int oneStageFireCount = 0, oneStageFireHitCount = 0;
+    private int allFireCount = 0, allFireHitCount = 0, allReloadCount = 0;
     private int stageLevel = 0;
     private int oneStageScore = 0, oneStageEditPoint = 0, score = 0, editPoint = 0;
     private int maxAmmoLevel = 0, penetrateLevel = 0, reloadSpeedLevel = 0, damageLevel = 0, fireRateLevel = 0, recoilSuppressionLevel = 0;
-
     private string uuid = "";
 
     void Start()
@@ -83,7 +84,7 @@ public class GlobalControl : MonoBehaviour
             if (readyTime < 0.05)
             {
                 readyText.text = "";
-                stageStart();
+                startStage();
                 isReady = false;
             }
             else
@@ -92,42 +93,52 @@ public class GlobalControl : MonoBehaviour
                 readyText.text = "Ready : " + readyTime.ToString("f2");
             }
         }
-        if (isEdit)
+        if (isResult)
         {
-            editUI.SetActive(true);
+
+            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
+            {
+                endStageResult();
+            }
         }
     }
-    public void stageStart()
+    public void startStage()
     {
         Time.timeScale = 1;
+        oneStageFireHitCount = 0;
+        oneStageFireCount = 0;
+        oneStageTargetTotalCount = 0;
+        oneStageTargetTotalBreakCount = 0;
         stages[currentStage].SetActive(true);
     }
-    public void stageEnd()
+    public void endStage()
     {
         stages[currentStage].SetActive(false);
         currentStage++;
         if (stages.Length < currentStage)
         {
             Debug.Log("game end");
+            endClearResult();
         }
-        isEdit = true;
+        else
+        {
+            resultUI.SetActive(true);
+            setScore();
+            setEditPoint();
+            setResultText();
+        }
         playerStatus = 2;
         Time.timeScale = 0;
         Cursor.visible = true;
-    }
-    public void resultStart()
-    {
+        isResult = true;
 
     }
-    public void resultEnd()
+
+    public void endStageResult()
     {
-        editUI.SetActive(true);
-    }
-    public void endResultStart()
-    {
-    }
-    public void endResultEnd()
-    {
+        resultUI.SetActive(false);
+        isResult = false;
+        isEdit = true;
         editUI.SetActive(true);
     }
     public void editEnd()
@@ -139,27 +150,63 @@ public class GlobalControl : MonoBehaviour
         Time.timeScale = 1;
         isReady = true;
         readyTime = StaticReadyTime;
+    }
+    public void endClearResult()
+    {
 
     }
-    public void setTargetCount()
+
+    private void setResultText()
     {
-        targetTotalCount++;
+        // resultText
+        float hitRatio = oneStageFireCount == 0 ? 0 : ((float)oneStageFireHitCount / (float)oneStageFireCount) * 100;
+        resultText.text = "break target : " + oneStageTargetTotalBreakCount + " / " + oneStageTargetTotalCount + "\n";
+        resultText.text += "fire count : " + oneStageFireCount + "\n";
+        resultText.text += "hit count : " + oneStageFireHitCount + "\n";
+        resultText.text += "hit ratio : " + hitRatio.ToString("F2") + "% \n";
+        resultText.text += "get score : " + oneStageScore + "\n";
+        resultText.text += "get edit point : " + oneStageEditPoint + "\n";
+        resultText.text += "\n";
+        resultText.text += "total score : " + score + "\n";
+    }
+    private void setClearResultText()
+    {
+        // clearResultText
+
+    }
+    public void addTargetCount()
+    {
+        allTargetTotalCount++;
+        oneStageTargetTotalCount++;
     }
     public void addBreakTargetCount()
     {
         oneStageTargetTotalBreakCount++;
+        allTargetBreakCount++;
     }
     public void addFireCount()
     {
-        fireCount++;
+        allFireCount++;
+        oneStageFireCount++;
     }
     public void addFireHitCount()
     {
-        fireHitCount++;
+        allFireHitCount++;
+        oneStageFireHitCount++;
     }
     public void addReloadCount()
     {
-        reloadCount++;
+        allReloadCount++;
+    }
+    private void setScore()
+    {
+        oneStageScore = player.score - score;
+        score = player.score;
+    }
+    private void setEditPoint()
+    {
+        oneStageEditPoint = player.point - editPoint;
+        editPoint = player.point;
     }
     public void setLevel(int ammo = 0, int penetrate = 0, int reload = 0, int damage = 0, int fire = 0, int recoil = 0)
     {

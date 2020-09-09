@@ -433,7 +433,7 @@ GameObject:
   - component: {fileID: 60168257}
   - component: {fileID: 60168256}
   m_Layer: 5
-  m_Name: Text
+  m_Name: clickText
   m_TagString: EditUI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6634,6 +6634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c14d9aa81ca8e74a8fe3d417e4e144c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1953185521}
   currentStage: 0
   playerStatus: 0
   isReady: 0
@@ -6641,16 +6642,18 @@ MonoBehaviour:
   isEdit: 0
   isExplanation: 0
   isResult: 0
+  isClearResult: 0
   explanationUIs:
   - {fileID: 125463491}
   - {fileID: 1027209601}
   editUI: {fileID: 1250302044}
   StaticReadyTime: 3
   readyText: {fileID: 1296987272}
-  resultUI: {fileID: 0}
-  resultText: {fileID: 0}
-  endResultUI: {fileID: 0}
-  endResultText: {fileID: 0}
+  resultUI: {fileID: 1390692267}
+  resultText: {fileID: 2140742230}
+  clearResultUI: {fileID: 0}
+  clearResultText: {fileID: 0}
+  clearScoreText: {fileID: 0}
   stages:
   - {fileID: 1870051584}
   - {fileID: 870793916}

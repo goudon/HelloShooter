@@ -22,7 +22,7 @@ public class TargetGenerate : MonoBehaviour
         foreach (Target target in stageTargets)
         {
             target.Activation(false);
-            totalTarget++;
+            globalControl.addTargetCount();
         }
         timeBar.GetComponent<RectTransform>().sizeDelta = new Vector2(0,3);
     }
@@ -45,17 +45,8 @@ public class TargetGenerate : MonoBehaviour
             timeBar.GetComponent<RectTransform>().sizeDelta = new Vector2(550 * (elapsedTime/maxTime), 3);
         }
         else {
-            globalControl.stageEnd();
+            globalControl.endStage();
         }
-
-        //     instantiateTarget.maxSec = 2.0f;
-        //     instantiateTarget.maxHealth = 2.0f;
-        //     instantiateTarget.destroyScore = 500;
-        //     instantiateTarget.player = player;
-        //     Instantiate(instantiateTarget, randomRange, transform.rotation);
-        //     generateTime = 2.0f;
-        // 
-        // 
     }
 
 }

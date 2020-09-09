@@ -139,6 +139,7 @@ public class Player : MonoBehaviour
         {
             remainAmmo = maxAmmoLevelList[maxAmmoLevel];
             isReload = false;
+            globalControl.addReloadCount();
             realoadUI.SetActive(false);
         }
         else if (currentReloadTime <= 0 && !isReload && remainAmmo <= 0)
