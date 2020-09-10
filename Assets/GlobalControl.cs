@@ -60,7 +60,7 @@ public class GlobalControl : MonoBehaviour
         {
             Time.timeScale = 0;
 
-            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(1) || Input.GetMouseButtonUp(0))
             {
                 explanationUIs[explanationPage].SetActive(false);
                 explanationPage++;
@@ -95,10 +95,16 @@ public class GlobalControl : MonoBehaviour
         }
         if (isResult)
         {
-
             if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
             {
                 endStageResult();
+            }
+        }
+        if (isClearResult)
+        {
+            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(0))
+            {
+                endClearResult();
             }
         }
     }
@@ -115,10 +121,11 @@ public class GlobalControl : MonoBehaviour
     {
         stages[currentStage].SetActive(false);
         currentStage++;
-        if (stages.Length < currentStage)
+        if (stages.Length <= currentStage)
         {
             Debug.Log("game end");
             endClearResult();
+            isClearResult = true;
         }
         else
         {
@@ -126,12 +133,11 @@ public class GlobalControl : MonoBehaviour
             setScore();
             setEditPoint();
             setResultText();
+            playerStatus = 2;
+            isResult = true;
         }
-        playerStatus = 2;
         Time.timeScale = 0;
         Cursor.visible = true;
-        isResult = true;
-
     }
 
     public void endStageResult()
