@@ -50,28 +50,33 @@ public class Target : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        switch (targetType)
+        if (Time.timeScale > 0)
         {
-            case 0:
-                // don't move
-                break;
-            case 1:
-                // Repetition move
-                checkDist(targetPos);
-                gameObject.transform.position = new Vector2(targetPos.x + movementVector.x, targetPos.y + movementVector.y);
-                break;
-            case 2:
-                // Refrection move
-                checkWall(targetPos);
-                gameObject.transform.position = new Vector2(targetPos.x + movementVector.x * isReflectX, targetPos.y + movementVector.y * isReflectY);
-                break;
-            case 3:
-                // circurate move 
-                gameObject.transform.position = new Vector2(fixedPos.x + distance, fixedPos.y);
-                currentRot += moveSpeed;
-                gameObject.transform.position = Quaternion.Euler(0, 0, currentRot) * gameObject.transform.position;
-                break;
+
+            switch (targetType)
+            {
+                case 0:
+                    // don't move
+                    break;
+                case 1:
+                    // Repetition move
+                    checkDist(targetPos);
+                    gameObject.transform.position = new Vector2(targetPos.x + movementVector.x, targetPos.y + movementVector.y);
+                    break;
+                case 2:
+                    // Refrection move
+                    checkWall(targetPos);
+                    gameObject.transform.position = new Vector2(targetPos.x + movementVector.x * isReflectX, targetPos.y + movementVector.y * isReflectY);
+                    break;
+                case 3:
+                    // circurate move 
+                    gameObject.transform.position = new Vector2(fixedPos.x + distance, fixedPos.y);
+                    currentRot += moveSpeed;
+                    gameObject.transform.position = Quaternion.Euler(0, 0, currentRot) * gameObject.transform.position;
+                    break;
+            }
         }
+
     }
     public void Damage(float damage)
     {

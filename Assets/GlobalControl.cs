@@ -24,7 +24,9 @@ public class GlobalControl : MonoBehaviour
     public GameObject resultUI;
     public Text resultText;
     public GameObject clearResultUI;
-    public Text clearResultText, clearScoreText;
+    public Text clearText, gradeText, scoreText;
+    private int[] gradeRank = { 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000 };
+    private string[] gradeRankText = { "F", "E", "D", "C", "B", "A", "S", "SS", "SSS", "Hello God" };
     // mainMenu : 0 , stage : 1 , edit : 2
     public GameObject[] stages = new GameObject[5];
     // result status
@@ -68,7 +70,6 @@ public class GlobalControl : MonoBehaviour
                 {
                     isExplanation = false;
                     Time.timeScale = 1;
-
                     isReady = true;
                 }
                 else
@@ -76,8 +77,6 @@ public class GlobalControl : MonoBehaviour
                     explanationUIs[explanationPage].SetActive(true);
                 }
             }
-
-
         }
         if (isReady)
         {
@@ -123,8 +122,11 @@ public class GlobalControl : MonoBehaviour
         currentStage++;
         if (stages.Length <= currentStage)
         {
-            Debug.Log("game end");
-            endClearResult();
+            resultUI.SetActive(true);
+            setScore();
+            setEditPoint();
+            setResultText();
+            isResult = true;
             isClearResult = true;
         }
         else
@@ -144,8 +146,16 @@ public class GlobalControl : MonoBehaviour
     {
         resultUI.SetActive(false);
         isResult = false;
-        isEdit = true;
-        editUI.SetActive(true);
+        if (isClearResult)
+        {
+            clearResultUI.SetActive(true);
+            setClearResultText();
+        }
+        else
+        {
+            isEdit = true;
+            editUI.SetActive(true);
+        }
     }
     public void editEnd()
     {
@@ -162,23 +172,40 @@ public class GlobalControl : MonoBehaviour
 
     }
 
+
     private void setResultText()
     {
         // resultText
         float hitRatio = oneStageFireCount == 0 ? 0 : ((float)oneStageFireHitCount / (float)oneStageFireCount) * 100;
-        resultText.text = "break target : " + oneStageTargetTotalBreakCount + " / " + oneStageTargetTotalCount + "\n";
+        resultText.text = "stage : " + currentStage + "\n";
+        resultText.text += "\n";
+        resultText.text += "break target : " + oneStageTargetTotalBreakCount + " / " + oneStageTargetTotalCount + "\n";
         resultText.text += "fire count : " + oneStageFireCount + "\n";
         resultText.text += "hit count : " + oneStageFireHitCount + "\n";
         resultText.text += "hit ratio : " + hitRatio.ToString("F2") + "% \n";
         resultText.text += "get score : " + oneStageScore + "\n";
         resultText.text += "get edit point : " + oneStageEditPoint + "\n";
         resultText.text += "\n";
-        resultText.text += "total score : " + score + "\n";
+        resultText.text += "score : " + score + "\n";
     }
     private void setClearResultText()
     {
-        // clearResultText
+        float hitRatio = oneStageFireCount == 0 ? 0 : ((float)allFireHitCount / (float)allFireCount) * 100;
+        clearText.text = "total break target : " + allTargetBreakCount + " / " + allTargetTotalCount + "\n";
+        clearText.text += "total fire count : " + allFireCount + "\n";
+        clearText.text += "total hit count : " + allFireHitCount + "\n";
+        clearText.text += "total hit ratio : " + hitRatio.ToString("F2") + "% \n";
 
+        scoreText.text = "Your Score : " + player.score;
+        int i = 0;
+        foreach (int grade in gradeRank)
+        {
+            if (grade < player.score)
+            {
+                i++;
+            }
+        }
+        gradeText.text = "your Grade : " + gradeRankText[i];
     }
     public void addTargetCount()
     {
@@ -213,6 +240,10 @@ public class GlobalControl : MonoBehaviour
     {
         oneStageEditPoint = player.point - editPoint;
         editPoint = player.point;
+    }
+    public void updateEditPoint(int inPoint)
+    {
+        editPoint = inPoint;
     }
     public void setLevel(int ammo = 0, int penetrate = 0, int reload = 0, int damage = 0, int fire = 0, int recoil = 0)
     {

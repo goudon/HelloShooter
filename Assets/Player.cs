@@ -171,6 +171,7 @@ public class Player : MonoBehaviour
         damage = damageLevelList[damageLevel];
         remainAmmo = maxAmmoLevelList[maxAmmoLevel];
         realoadUI.SetActive(false);
+        emptyAmmoUI.SetActive(false);
     }
     public void AddPoint(int inPoint)
     {
@@ -179,6 +180,7 @@ public class Player : MonoBehaviour
     public void UsePoint(int outPoint)
     {
         point -= outPoint;
+        globalControl.updateEditPoint(point);
     }
     public void AddScore(int inScore)
     {

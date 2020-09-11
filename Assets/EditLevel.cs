@@ -29,7 +29,7 @@ public class EditLevel : MonoBehaviour
         int level = (int)propaty.GetValue(player);
         int nextLevel = level + 1;
         if (level >= cost.Length) return;
-        if (player.point > cost[level])
+        if (player.point >= cost[level])
         {
             player.UsePoint(cost[level]);
         }
