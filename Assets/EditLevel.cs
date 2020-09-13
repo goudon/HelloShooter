@@ -11,6 +11,7 @@ public class EditLevel : MonoBehaviour
     public Sprite offSprite, onSprite;
     public Text buttonText;
     public int[] cost = new int[5] { 1000, 2500, 5000, 7500, 10000 };
+    public AudioSource upgrade,maxUpgrade;
     void Start()
     {
         buttonText.text = "Need Point : " + cost[0] + "pt";;
@@ -32,6 +33,8 @@ public class EditLevel : MonoBehaviour
         if (player.point >= cost[level])
         {
             player.UsePoint(cost[level]);
+            upgrade.PlayOneShot(upgrade.clip);
+
         }
         else
         {
@@ -42,6 +45,7 @@ public class EditLevel : MonoBehaviour
         if (nextLevel >= cost.Length)
         {
             buttonText.text = "Max status !!";
+            maxUpgrade.PlayOneShot(maxUpgrade.clip);
         }
         else
         {

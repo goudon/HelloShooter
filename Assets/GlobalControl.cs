@@ -39,6 +39,8 @@ public class GlobalControl : MonoBehaviour
     private int maxAmmoLevel = 0, penetrateLevel = 0, reloadSpeedLevel = 0, damageLevel = 0, fireRateLevel = 0, recoilSuppressionLevel = 0;
     private string uuid = "";
 
+    public AudioSource startStageSound,endStageSound;
+
     void Start()
     {
         foreach (GameObject page in explanationUIs)
@@ -115,10 +117,12 @@ public class GlobalControl : MonoBehaviour
         oneStageTargetTotalCount = 0;
         oneStageTargetTotalBreakCount = 0;
         stages[currentStage].SetActive(true);
+        startStageSound.PlayOneShot(startStageSound.clip);
     }
     public void endStage()
     {
         stages[currentStage].SetActive(false);
+        endStageSound.PlayOneShot(endStageSound.clip);
         currentStage++;
         if (stages.Length <= currentStage)
         {
@@ -160,6 +164,7 @@ public class GlobalControl : MonoBehaviour
     public void editEnd()
     {
         isEdit = false;
+        endStageSound.PlayOneShot(endStageSound.clip);
         editUI.SetActive(false);
         playerStatus = 1;
         Cursor.visible = false;
@@ -205,7 +210,7 @@ public class GlobalControl : MonoBehaviour
                 i++;
             }
         }
-        gradeText.text = "your Grade : " + gradeRankText[i];
+        gradeText.text = "Your Grade : " + gradeRankText[i];
     }
     public void addTargetCount()
     {
