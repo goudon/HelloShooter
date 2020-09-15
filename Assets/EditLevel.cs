@@ -14,7 +14,7 @@ public class EditLevel : MonoBehaviour
     public AudioSource upgrade,maxUpgrade;
     void Start()
     {
-        buttonText.text = "Need Point : " + cost[0] + "pt";;
+        buttonText.text = "Need Point : " + cost[0] + "pt";
     }
 
     // Update is called once per frame
@@ -34,7 +34,6 @@ public class EditLevel : MonoBehaviour
         {
             player.UsePoint(cost[level]);
             upgrade.PlayOneShot(upgrade.clip);
-
         }
         else
         {

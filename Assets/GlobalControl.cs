@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GlobalControl : MonoBehaviour
 {
@@ -38,9 +39,8 @@ public class GlobalControl : MonoBehaviour
     private int oneStageScore = 0, oneStageEditPoint = 0, score = 0, editPoint = 0;
     private int maxAmmoLevel = 0, penetrateLevel = 0, reloadSpeedLevel = 0, damageLevel = 0, fireRateLevel = 0, recoilSuppressionLevel = 0;
     private string uuid = "";
-
     public AudioSource startStageSound,endStageSound;
-
+    private AsyncOperation async;
     void Start()
     {
         foreach (GameObject page in explanationUIs)
@@ -259,5 +259,10 @@ public class GlobalControl : MonoBehaviour
         damageLevel = damage;
         fireRateLevel = fire;
         recoilSuppressionLevel = recoil;
+    }
+    public void GoBackTitle()
+    {
+        // StartCoroutine(LoadScene());
+        SceneManager.LoadScene("MainMenu");
     }
 }

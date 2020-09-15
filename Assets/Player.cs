@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     private float[] reloadSpeedLevelList = new float[6] { 1.75f, 1.5f, 1.25f, 1.0f, 0.75f, 0.5f };
     private float[] damageLevelList = new float[6] { 1.0f, 1.5f, 2.0f, 2.5f, 3.0f, 5.0f };
     private float[] fireRateLevelList = new float[6] { 0.15f, 0.125f, 0.1f, 0.075f, 0.05f, 0.03f };
-    private float[] recoilSuppressionLevelList = new float[6] { 0.01f, 0.1f, 0.2f, 0.35f, 0.6f, 0.9f };
+    private float[] recoilSuppressionLevelList = new float[6] { 0.01f, 0.4f, 0.5f, 0.6f, 0.7f, 0.9f };
 
     public int maxAmmoLevel { set; get; } = 0;
     public int penetrateLevel { set; get; } = 0;
