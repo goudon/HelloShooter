@@ -13,6 +13,7 @@ public class MenuControle : MonoBehaviour
     public float transitionTime = 1.0f;
     void Start()
     {
+        Time.timeScale = 1;
         isClick = false;
     }
 
