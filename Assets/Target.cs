@@ -19,7 +19,7 @@ public class Target : MonoBehaviour
 
     private int isReflectX = 1, isReflectY = 1;
     private Vector2 movementVector;
-    const float minX = -8.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f;
+    const float minX = -4.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f;
     // static Vector2 randomRange = new Vector2(UnityEngine.Random.Range(-7.0f, 7.0f), UnityEngine.Random.Range(-5.0f, 5.0f));
     private Vector2 fixedPos;
     private float currentRot = 0;
