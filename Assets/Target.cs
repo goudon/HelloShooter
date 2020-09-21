@@ -39,6 +39,11 @@ public class Target : MonoBehaviour
             Vector2 tempVec2 = new Vector2(moveSpeed, 0);
             movementVector = Quaternion.Euler(0, 0, moveDirection) * tempVec2;
         }
+        if (targetType == 3)
+        {
+            currentRot = moveDirection;
+            gameObject.transform.position = Quaternion.Euler(0, 0, moveDirection) * gameObject.transform.position;
+        }
     }
 
     // Update is called once per frame
