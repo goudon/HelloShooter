@@ -39,10 +39,19 @@ public class Player : MonoBehaviour
 
     private string[] gameStatusList = new string[] { "in_game", "reinforcing" };
     private int targetLayerMask = 0;
-
-
+    public bool isDebug = false;
+    public int debugAmmoLevel,debugPenetrateLevel,debugReloadSpeedLevel, debugDamageLevel,debugFireRateLevel  = 0;
     void Start()
     {
+        if (isDebug)
+        {
+            maxAmmoLevel = debugAmmoLevel;
+            penetrateLevel = debugPenetrateLevel;
+            reloadSpeedLevel = debugReloadSpeedLevel;
+            damageLevel = debugDamageLevel;
+            fireRateLevel = debugFireRateLevel;
+        }
+
         Cursor.visible = false;
         targetLayerMask = LayerMask.GetMask("Target");
 
@@ -69,7 +78,8 @@ public class Player : MonoBehaviour
         // Debug.Log(Input.mousePosition);
         transform.position = (Vector2)ray.origin;
         bool checkOptionOrEdit = (!globalControl.isOption && !globalControl.isEdit && !globalControl.isExplanation);
-        if (globalControl.isEdit) {
+        if (globalControl.isEdit)
+        {
             currentRandRange = 0;
         }
         if (Input.GetMouseButton(1) && checkOptionOrEdit)
