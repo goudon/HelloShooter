@@ -18,8 +18,9 @@ public class Target : MonoBehaviour
     public float distance = 1.0f, moveDirection = 1.0f, moveSpeed = 1.0f;
 
     private int isReflectX = 1, isReflectY = 1;
+    [SerializeField]
     private Vector2 movementVector;
-    const float minX = -4.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f;
+    private float minX = -8.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f;
     // static Vector2 randomRange = new Vector2(UnityEngine.Random.Range(-7.0f, 7.0f), UnityEngine.Random.Range(-5.0f, 5.0f));
     private Vector2 fixedPos;
     private float currentRot = 0;
@@ -71,7 +72,7 @@ public class Target : MonoBehaviour
                 case 2:
                     // Refrection move
                     checkWall(targetPos);
-                    gameObject.transform.position = new Vector2(targetPos.x + movementVector.x * isReflectX, targetPos.y + movementVector.y * isReflectY);
+                    gameObject.transform.position = new Vector2(targetPos.x + movementVector.x, targetPos.y + movementVector.y);
                     break;
                 case 3:
                     // circurate move 
@@ -109,21 +110,15 @@ public class Target : MonoBehaviour
     }
     private void checkWall(Vector2 targetPos)
     {
-        if (targetPos.x >= maxX)
+        if (targetPos.x >= maxX || targetPos.x <= minX)
         {
-            isReflectX = -1;
+            // isReflectX = -1;
+            movementVector = new Vector2( -movementVector.x,  movementVector.y);
         }
-        else if (targetPos.x <= minX)
+        if (targetPos.y >= maxY || targetPos.y <= minY)
         {
-            isReflectX = 1;
-        }
-        if (targetPos.y >= maxY)
-        {
-            isReflectY = -1;
-        }
-        else if (targetPos.y <= minY)
-        {
-            isReflectY = 1;
+            // isReflectY = -1; 
+            movementVector = new Vector2( movementVector.x,  -movementVector.y);
         }
     }
     /*memo: 2020 08 12 Collisionで制御しようとした*/
