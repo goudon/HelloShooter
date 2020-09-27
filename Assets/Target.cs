@@ -20,7 +20,7 @@ public class Target : MonoBehaviour
     private int isReflectX = 1, isReflectY = 1;
     [SerializeField]
     private Vector2 movementVector;
-    private float minX = -8.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f;
+    private float minX = -8.0f, minY = -4.0f, maxX = 8.0f, maxY = 3.0f; // use target size is equals 0.0075
     // static Vector2 randomRange = new Vector2(UnityEngine.Random.Range(-7.0f, 7.0f), UnityEngine.Random.Range(-5.0f, 5.0f));
     private Vector2 fixedPos;
     private float currentRot = 0;
@@ -121,27 +121,4 @@ public class Target : MonoBehaviour
             movementVector = new Vector2( movementVector.x,  -movementVector.y);
         }
     }
-    /*memo: 2020 08 12 Collisionで制御しようとした*/
-    // void OnTriggerEnter2D(Collider2D c)
-    // {
-    //     string layerName = LayerMask.LayerToName(c.gameObject.layer);
-    //     if (layerName == "Bullet")
-    //     {
-    //         Vector2 bulletPos = c.gameObject.transform.position;
-    //         float dist = Vector2.Distance(bulletPos, transform.position);
-    //         float rad = gameObject.GetComponent<RectTransform>().localScale.x * gameObject.GetComponent<CircleCollider2D>().radius;
-    //         // TODO : check my layer count (z layer position)
-    //         int myLayerPositionCount = 1;
-    //         float proc = (1 - dist / rad);
-    //         // TODO : Get Player Damage
-    //         float damagePoint = 1 * proc;
-    //         Damage(damagePoint);
-    //     }
-
-    // }
-    // int CheckTargetLayerCount(Vector2 bulletPos)
-    // {
-
-    //     return 0;
-    // }
 }
