@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
     private string[] gameStatusList = new string[] { "in_game", "reinforcing" };
     private int targetLayerMask = 0;
     public bool isDebug = false;
-    public int debugAmmoLevel,debugPenetrateLevel,debugReloadSpeedLevel, debugDamageLevel,debugFireRateLevel  = 0;
+    public int debugAmmoLevel, debugPenetrateLevel, debugReloadSpeedLevel, debugDamageLevel, debugFireRateLevel, debugrecoilSuppressionLevel = 0;
     void Start()
     {
         if (isDebug)
@@ -50,6 +50,7 @@ public class Player : MonoBehaviour
             reloadSpeedLevel = debugReloadSpeedLevel;
             damageLevel = debugDamageLevel;
             fireRateLevel = debugFireRateLevel;
+            recoilSuppressionLevel = debugrecoilSuppressionLevel;
         }
 
         Cursor.visible = false;
