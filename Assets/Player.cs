@@ -37,12 +37,13 @@ public class Player : MonoBehaviour
     public AudioSource soundReload;
     public AudioSource soundHit;
 
-    private string[] gameStatusList = new string[] { "in_game", "reinforcing" };
     private int targetLayerMask = 0;
     public bool isDebug = false;
     public int debugAmmoLevel, debugPenetrateLevel, debugReloadSpeedLevel, debugDamageLevel, debugFireRateLevel, debugrecoilSuppressionLevel = 0;
     void Start()
     {
+        MenuControle loadScene = MenuControle.Instance;
+        isDebug = loadScene.isDebug;
         if (isDebug)
         {
             maxAmmoLevel = debugAmmoLevel;
